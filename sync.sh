@@ -1,8 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
-set FILES=".vimrc .vim/ .dircolors* .bashrc .bash_profile .bash_aliases .bash_logout"
+FILES=$(find . -type d -name '.git' -prune -o -print | sed -re "s/\.+\///" -e "/^\.$/d")
 
-cp -rf ~/$FILES ~/dotfiles.ubuntu
+set -e
 
-ls .vim/plugged/ | grep -v .gitkeep | xargs rm
+for file in $FILES
+do
+	if [ -f ~/$file ]
+	then
+		cp -rf ~/$file $file
+	fi
+done
 

@@ -126,3 +126,6 @@ export EDITOR=vim
 
 eval $(ssh-agent -s)
 
+/usr/games/fortune
+
+
