@@ -20,7 +20,15 @@ fi
 autoload -U promptinit; promptinit
 prompt pure
 
-eval $(ssh-agent)
+if [ -z "$SSH_AUTH_SOCK" ]; then
+	export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+	ssh-add -l >/dev/null 2>&1
+	if [ $? -eq 2 ]; then   # 2 = no agent listening on the socket
+		mkdir -p -m 700 ~/.ssh
+		rm -f "$SSH_AUTH_SOCK"
+		eval "$(ssh-agent -s -a "$SSH_AUTH_SOCK")" >/dev/null
+	fi
+fi
 
 alias ll="ls -la"
 
@@ -33,3 +41,5 @@ alias ssh="TERM=vt100 ssh"
 
 source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="$HOME/.local/bin:$PATH"
+
+command -v fortune >/dev/null && fortune
