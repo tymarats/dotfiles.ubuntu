@@ -1,8 +1,8 @@
-## macOS dotfiles
+## Dotfiles
 
-This is a collection of minimalistic dotfiles for macOS.
+This is a collection of minimalistic dotfiles for macOS and Ubuntu (incl. WSL).
 
-In zsh:
+Install:
 ```
 ./install.sh
 ```

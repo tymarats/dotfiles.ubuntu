@@ -1,16 +1,24 @@
-# Load version control information
-fpath+=("$(brew --prefix)/share/zsh/site-functions")
+if [[ "$OSTYPE" == darwin* ]]; then
+	eval "$(/opt/homebrew/bin/brew shellenv zsh)"
+
+	# Load version control information
+	fpath+=("$(brew --prefix)/share/zsh/site-functions")
+
+	# Add Visual Studio Code (code)
+	export PATH="$PATH:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
+	alias ls='ls -G'
+else
+	# pure is cloned by install.sh
+	fpath+=("$HOME/.zsh/pure")
+
+	eval "$(dircolors -b)"
+	# Windows drives (/mnt/*) are world-writable, don't highlight them in green
+	export LS_COLORS="$LS_COLORS:ow=1;34:tw=1;34:"
+	alias ls='ls --color=auto'
+fi
+
 autoload -U promptinit; promptinit
 prompt pure
-
-# Add Visual Studio Code (code)
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin"
-alias ls='ls -G'
-
-# Setting PATH for Python 3.6
-# The original version is saved in .bash_profile.pysave
-PATH="/Library/Frameworks/Python.framework/Versions/3.6/bin:${PATH}"
-export TERM="screen-256color"
 
 eval $(ssh-agent)
 
@@ -25,5 +33,3 @@ alias ssh="TERM=vt100 ssh"
 
 source ~/.zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 export PATH="$HOME/.local/bin:$PATH"
-
-eval "$(/opt/homebrew/bin/brew shellenv zsh)"
